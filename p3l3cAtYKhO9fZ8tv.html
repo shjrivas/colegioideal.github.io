@@ -1,0 +1,938 @@
+<html><head><base href="https://consultorio-medico.example.com/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consultorio Médico Colegio Ideal</title>
+<style>
+  :root {
+    --royal-blue: #00539C;
+    --mustard-yellow: #FFFF00; /* Changed from #EEA47F to bright yellow */
+    --white: #FFFFFF;
+  }
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--white);
+    color: var(--royal-blue);
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  .title-box {
+    background-color: var(--royal-blue);
+    color: var(--white);
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
+  .title-box h1 {
+    margin: 0;
+    text-transform: uppercase;
+    font-size: 24px;
+  }
+  h1, h2, h3 {
+    color: var(--royal-blue);
+  }
+  .toggle-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .toggle-button {
+    background-color: var(--royal-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  .toggle-button:hover {
+    background-color: var(--mustard-yellow);
+  }
+  .yellow-button {
+    background-color: var(--mustard-yellow);
+  }
+  .yellow-button:hover {
+    background-color: var(--royal-blue);
+  }
+  .collapsible-section {
+    display: none;
+    background-color: var(--white);
+    border: 2px solid var(--royal-blue);
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  form {
+    margin-bottom: 20px;
+  }
+  label {
+    display: block;
+    margin-top: 10px;
+  }
+  input[type="text"], input[type="number"], input[type="date"], select, textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  button {
+    background-color: var(--royal-blue);
+    color: var(--white);
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  button:hover {
+    background-color: var(--mustard-yellow);
+  }
+  .search-container {
+    margin-bottom: 20px;
+  }
+  #searchInput {
+    width: calc(100% - 80px);
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid var(--royal-blue);
+    border-radius: 4px;
+  }
+  #searchButton {
+    width: 70px;
+  }
+  #pacientesList {
+    margin-top: 20px;
+  }
+  .paciente-item {
+    background-color: #ecf0f1;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+  }
+  .patient-actions {
+    margin-top: 10px;
+  }
+  .edit-button, .delete-button {
+    background-color: var(--royal-blue);
+    color: var(--white);
+    border: none;
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  .edit-button:hover, .delete-button:hover {
+    background-color: var(--mustard-yellow);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    border: 1px solid var(--royal-blue);
+    padding: 8px;
+    text-align: left;
+  }
+  th {
+    background-color: var(--royal-blue);
+    color: var(--white);
+  }
+  tr:nth-child(even) {
+    background-color: var(--mustard-yellow);
+  }
+  .month-selector {
+    margin: 20px 0;
+  }
+  #estadisticasContainer {
+    margin-top: 30px;
+  }
+  .categoria-item {
+    background-color: var(--white);
+    border: 1px solid var(--royal-blue);
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+  }
+  .categoria-item h3 {
+    margin-top: 0;
+    color: var(--royal-blue);
+  }
+  .diagnostico-count {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--royal-blue);
+  }
+  .download-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--white);
+    color: var(--royal-blue);
+    border: 2px solid var(--royal-blue);
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  .download-button:hover {
+    background-color: var(--royal-blue);
+    color: var(--white);
+  }
+  .submit-button-right {
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+    width: auto;
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="title-box">
+      <h1>CONSULTORIO MÉDICO COLEGIO IDEAL</h1>
+    </div>
+    
+    <div class="toggle-container">
+      <button id="togglePatientForm" class="toggle-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="8.5" cy="7" r="4"></circle>
+          <line x1="20" y1="8" x2="20" y2="14"></line>
+          <line x1="23" y1="11" x2="17" y2="11"></line>
+        </svg>
+      </button>
+      <button id="togglePatientList" class="toggle-button yellow-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div id="patientRegistration" class="collapsible-section">
+      <h2>Registro de Paciente</h2>
+      <form id="pacienteForm">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" required>
+        
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" required>
+        
+        <label for="sexo">Sexo:</label>
+        <select id="sexo" required>
+          <option value="">Seleccione</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Femenino">Femenino</option>
+          <option value="Otro">Otro</option>
+        </select>
+        
+        <label for="categoria">Categoría:</label>
+        <select id="categoria" required>
+          <option value="">Seleccione</option>
+          <option value="Estudiante">Estudiante</option>
+          <option value="Personal">Personal</option>
+        </select>
+
+        <div id="subcategoriaEstudiante" style="display: none;">
+          <label for="nivelEducativo">Nivel Educativo:</label>
+          <select id="nivelEducativo" required>
+            <option value="">Seleccione</option>
+            <option value="Inicial">Inicial</option>
+            <option value="Básica">Básica</option>
+            <option value="Secundaria">Secundaria</option>
+          </select>
+
+          <div id="subnivelInicial" style="display: none;">
+            <label for="subnivelInicialSelect">Subnivel Inicial:</label>
+            <select id="subnivelInicialSelect" required>
+              <option value="">Seleccione</option>
+              <option value="I nivel">I nivel</option>
+              <option value="II nivel">II nivel</option>
+              <option value="III nivel">III nivel</option>
+            </select>
+          </div>
+
+          <div id="subnivelBasica" style="display: none;">
+            <label for="subnivelBasicaSelect">Grado Básica:</label>
+            <select id="subnivelBasicaSelect" required>
+              <option value="">Seleccione</option>
+              <option value="1er grado">1er grado</option>
+              <option value="2do grado">2do grado</option>
+              <option value="3er grado">3er grado</option>
+              <option value="4to grado">4to grado</option>
+              <option value="5to grado">5to grado</option>
+              <option value="6to grado">6to grado</option>
+            </select>
+          </div>
+
+          <div id="subnivelSecundaria" style="display: none;">
+            <label for="subnivelSecundariaSelect">Año Secundaria:</label>
+            <select id="subnivelSecundariaSelect" required>
+              <option value="">Seleccione</option>
+              <option value="1er año">1er año</option>
+              <option value="2do año">2do año</option>
+              <option value="3er año">3er año</option>
+              <option value="4to año">4to año</option>
+              <option value="5to año">5to año</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="subcategoriaPersonal" style="display: none;">
+          <label for="tipoPersonal">Tipo de Personal:</label>
+          <select id="tipoPersonal" required>
+            <option value="">Seleccione</option>
+            <option value="Administrativo">Administrativo</option>
+            <option value="Mantenimiento">Mantenimiento</option>
+            <option value="Profesores">Profesores</option>
+          </select>
+        </div>
+        
+        <label for="morbilidades">Morbilidades:</label>
+        <textarea id="morbilidades"></textarea>
+        
+        <label for="alergias">Alergias:</label>
+        <textarea id="alergias"></textarea>
+        
+        <label for="peso">Peso (kg):</label>
+        <input type="number" id="peso" step="0.1" required>
+        
+        <label for="talla">Talla (cm):</label>
+        <input type="number" id="talla" required>
+        
+        <label for="emergencyContactName">Contacto de Emergencia:</label>
+        <input type="text" id="emergencyContactName" placeholder="Nombre" required>
+
+        <label for="emergencyContactRelation">Parentesco:</label>
+        <input type="text" id="emergencyContactRelation" required>
+
+        <label for="emergencyContactPhone">Teléfono:</label>
+        <input type="tel" id="emergencyContactPhone" required>
+
+        <button type="submit" class="submit-button-right">Registrar Paciente</button>
+      </form>
+    </div>
+
+    <div id="patientList" class="collapsible-section">
+      <h2>Pacientes Registrados</h2>
+      <div id="pacientesList"></div>
+    </div>
+    
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Buscar paciente por código">
+      <button id="searchButton">Buscar</button>
+    </div>
+    
+    <h2>Registro de Consulta</h2>
+    <form id="consultaForm">
+      <label for="pacienteSearch">Buscar Paciente:</label>
+      <input type="text" id="pacienteSearch" placeholder="Buscar por nombre o código">
+      <select id="pacienteSelect" required>
+        <option value="">Seleccione un paciente</option>
+      </select>
+      
+      <label for="fechaConsulta">Fecha de Consulta:</label>
+      <input type="date" id="fechaConsulta" required>
+      
+      <label for="diagnostico">Diagnóstico:</label>
+      <select id="diagnostico" required></select>
+      
+      <label for="tratamiento">Tratamiento:</label>
+      <textarea id="tratamiento" required></textarea>
+      
+      <button type="submit">Registrar Consulta</button>
+    </form>
+
+    <h2>Consultas Registradas</h2>
+    <div class="month-selector">
+      <label for="monthSelect">Seleccionar Mes:</label>
+      <select id="monthSelect"></select>
+    </div>
+    <table id="consultasTable">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Paciente</th>
+          <th>Diagnóstico</th>
+          <th>Tratamiento</th>
+        </tr>
+      </thead>
+      <tbody id="consultasTableBody"></tbody>
+    </table>
+
+    <h2>Estadísticas de Diagnósticos</h2>
+    <div id="estadisticasContainer"></div>
+    <button id="downloadPdfButton" class="download-button">Descargar Estadísticas (PDF)</button>
+  </div>
+
+  <script>
+    let pacientes = [];
+    let consultas = [];
+    const categoriasSIS03 = {
+      "Enfermedades Transmisibles": [
+        "Infecciones respiratorias agudas",
+        "Enfermedades diarreicas",
+        "Transmisión por vectores",
+        "Transmisión zoonótica",
+        "Transmisión sexual",
+        "Otras enfermedades transmisibles"
+      ],
+      "Enfermedades endocrinas": [
+        "Diabetes mellitus",
+        "Tiroides",
+        "Desnutrición",
+        "Obesidad",
+        "Malnutrición",
+        "Alergias"
+      ],
+      "Trastornos mentales y del comportamiento": [
+        "Ansiedad",
+        "Depresión",
+        "Intento de suicidio",
+        "TOC",
+        "Ataques de pánico",
+        "Otros trastornos"
+      ],
+      "Enfermedades de la piel": [
+        "Atopias",
+        "Dermatitis",
+        "Fotosensibilidad",
+        "Otras enfermedades de la piel"
+      ],
+      "Enfermedades del oído": [
+        "Otitis media",
+        "Otitis externa",
+        "Cuerpo extraño",
+        "Otras enfermedades del oído"
+      ],
+      "Enfermedades del ojo": [
+        "Conjuntivitis",
+        "Chalazión",
+        "Orzuelo",
+        "Ojo rojo",
+        "Cuerpo extraño"
+      ],
+      "Enfermedades del sistema circulatorio": [
+        "Hipertensión arterial",
+        "Infarto agudo al miocardio",
+        "Enfermedad cerebro vascular",
+        "Varices",
+        "Arritmias"
+      ],
+      "Enfermedades del sistema nervioso": [
+        "Parálisis",
+        "Epilepsia",
+        "Convulsiones",
+        "Migrañas",
+        "Cefalea"
+      ],
+      "Enfermedades del sistema genito-urinario y gineco-obstétricos": [
+        "Infección del tracto urinario",
+        "Urethritis",
+        "Cólico nefrítico",
+        "Dismenorrea",
+        "Enfermedad inflamatoria del útero",
+        "Hemorragia de algún trimestre de embarazo",
+        "Pre-eclampsia/eclampsia",
+        "Aborto",
+        "Trastornos mamarios"
+      ],
+      "Enfermedades del sistema respiratorio": [
+        "Faringitis aguda",
+        "Amigdalitis aguda",
+        "Rinofaringitis aguda",
+        "Neumonía",
+        "Bronquiolitis aguda",
+        "Bronquitis aguda",
+        "Asma bronquial",
+        "Rinitis alérgica",
+        "Rinorrea",
+        "Epistaxis"
+      ],
+      "Enfermedades del sistema digestivo": [
+        "Dolor abdominal",
+        "Diarreas",
+        "Náuseas",
+        "Vómitos",
+        "Caries dental",
+        "Epigastralgia",
+        "Apendicitis",
+        "Gastritis",
+        "Odontalgia",
+        "Transgresión dietética"
+      ],
+      "Otras enfermedades no transmisibles": [],
+      "Lesiones y Accidentes": [
+        "Accidentes de tránsito",
+        "Caídas",
+        "Quemaduras",
+        "Intoxicaciones",
+        "Envenenamientos",
+        "Heridas",
+        "Fracturas",
+        "Luxaciones y esguinces",
+        "Intoxicación alimentaria",
+        "Intoxicación por otros elementos",
+        "Cuerpo extraño",
+        "Otras lesiones y accidentes"
+      ],
+      "Otros Motivos de Consulta": [
+        "Problemas odontológicos",
+        "Trastornos de la visión",
+        "Trastornos de la audición",
+        "Otros motivos no clasificados"
+      ]
+    };
+
+    function saveData() {
+      localStorage.setItem('pacientes', JSON.stringify(pacientes));
+      localStorage.setItem('consultas', JSON.stringify(consultas));
+    }
+
+    function loadData() {
+      const savedPacientes = localStorage.getItem('pacientes');
+      const savedConsultas = localStorage.getItem('consultas');
+      
+      if (savedPacientes) {
+        pacientes = JSON.parse(savedPacientes);
+      }
+      
+      if (savedConsultas) {
+        consultas = JSON.parse(savedConsultas);
+      }
+    }
+
+    function generarCodigoPaciente() {
+      return Math.random().toString(36).substr(2, 6).toUpperCase();
+    }
+
+    let pacienteEnEdicion = null;
+
+    function eliminarPaciente(id) {
+      if (confirm('¿Está seguro de que desea eliminar este paciente?')) {
+        pacientes = pacientes.filter(p => p.id !== id);
+        saveData(); 
+        actualizarListaPacientes();
+        actualizarSelectPacientes();
+      }
+    }
+
+    function editarPaciente(id) {
+      pacienteEnEdicion = pacientes.find(p => p.id === id);
+      if (pacienteEnEdicion) {
+        document.getElementById('nombre').value = pacienteEnEdicion.nombre;
+        document.getElementById('edad').value = pacienteEnEdicion.edad;
+        document.getElementById('sexo').value = pacienteEnEdicion.sexo;
+        document.getElementById('categoria').value = pacienteEnEdicion.categoria;
+        document.getElementById('morbilidades').value = pacienteEnEdicion.morbilidades;
+        document.getElementById('alergias').value = pacienteEnEdicion.alergias;
+        document.getElementById('peso').value = pacienteEnEdicion.peso;
+        document.getElementById('talla').value = pacienteEnEdicion.talla;
+        document.getElementById('emergencyContactName').value = pacienteEnEdicion.emergencyContact.name;
+        document.getElementById('emergencyContactRelation').value = pacienteEnEdicion.emergencyContact.relation;
+        document.getElementById('emergencyContactPhone').value = pacienteEnEdicion.emergencyContact.phone;
+
+        document.getElementById('categoria').dispatchEvent(new Event('change'));
+
+        if (pacienteEnEdicion.categoria === 'Estudiante') {
+          document.getElementById('nivelEducativo').value = pacienteEnEdicion.subcategoria;
+          document.getElementById('nivelEducativo').dispatchEvent(new Event('change'));
+          if (pacienteEnEdicion.subcategoria === 'Inicial') {
+            document.getElementById('subnivelInicialSelect').value = pacienteEnEdicion.subnivel;
+          } else if (pacienteEnEdicion.subcategoria === 'Básica') {
+            document.getElementById('subnivelBasicaSelect').value = pacienteEnEdicion.subnivel;
+          } else if (pacienteEnEdicion.subcategoria === 'Secundaria') {
+            document.getElementById('subnivelSecundariaSelect').value = pacienteEnEdicion.subnivel;
+          }
+        } else if (pacienteEnEdicion.categoria === 'Personal') {
+          document.getElementById('tipoPersonal').value = pacienteEnEdicion.subcategoria;
+        }
+
+        document.getElementById('patientRegistration').style.display = 'block';
+        document.getElementById('pacienteForm').querySelector('button[type="submit"]').textContent = 'Actualizar Paciente';
+      }
+    }
+
+    document.getElementById('pacienteForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const categoria = document.getElementById('categoria').value;
+      let subcategoria = '';
+      let subnivel = '';
+      if (categoria === 'Estudiante') {
+        subcategoria = document.getElementById('nivelEducativo').value;
+        if (subcategoria === 'Inicial') {
+          subnivel = document.getElementById('subnivelInicialSelect').value;
+        } else if (subcategoria === 'Básica') {
+          subnivel = document.getElementById('subnivelBasicaSelect').value;
+        } else if (subcategoria === 'Secundaria') {
+          subnivel = document.getElementById('subnivelSecundariaSelect').value;
+        }
+      } else if (categoria === 'Personal') {
+        subcategoria = document.getElementById('tipoPersonal').value;
+      }
+      const paciente = {
+        id: pacienteEnEdicion ? pacienteEnEdicion.id : Date.now(),
+        codigo: pacienteEnEdicion ? pacienteEnEdicion.codigo : generarCodigoPaciente(),
+        nombre: document.getElementById('nombre').value,
+        edad: document.getElementById('edad').value,
+        sexo: document.getElementById('sexo').value,
+        categoria: categoria,
+        subcategoria: subcategoria,
+        subnivel: subnivel,
+        morbilidades: document.getElementById('morbilidades').value,
+        alergias: document.getElementById('alergias').value,
+        peso: document.getElementById('peso').value,
+        talla: document.getElementById('talla').value,
+        emergencyContact: {
+          name: document.getElementById('emergencyContactName').value,
+          relation: document.getElementById('emergencyContactRelation').value,
+          phone: document.getElementById('emergencyContactPhone').value
+        }
+      };
+      
+      if (pacienteEnEdicion) {
+        const index = pacientes.findIndex(p => p.id === pacienteEnEdicion.id);
+        if (index !== -1) {
+          pacientes[index] = paciente;
+        }
+        pacienteEnEdicion = null;
+      } else {
+        pacientes.push(paciente);
+      }
+      
+      saveData(); 
+      actualizarListaPacientes();
+      actualizarSelectPacientes();
+      this.reset();
+      this.querySelector('button[type="submit"]').textContent = 'Registrar Paciente';
+    });
+
+    function actualizarListaPacientes() {
+      const lista = document.getElementById('pacientesList');
+      lista.innerHTML = '';
+      pacientes.forEach(paciente => {
+        const item = document.createElement('div');
+        item.className = 'paciente-item';
+        item.innerHTML = `
+          <h3>${paciente.nombre} (Código: ${paciente.codigo})</h3>
+          <p>Edad: ${paciente.edad} | Sexo: ${paciente.sexo} | Categoría: ${paciente.categoria} - ${paciente.subcategoria}${paciente.subnivel ? ' - ' + paciente.subnivel : ''}</p>
+          <p>Peso: ${paciente.peso} kg | Talla: ${paciente.talla} cm</p>
+          <p>Morbilidades: ${paciente.morbilidades}</p>
+          <p>Alergias: ${paciente.alergias}</p>
+          <p>Emergencia: ${paciente.emergencyContact.name} (${paciente.emergencyContact.relation}) - Tel: ${paciente.emergencyContact.phone}</p>
+          <div class="patient-actions">
+            <button class="edit-button" onclick="editarPaciente(${paciente.id})">Editar</button>
+            <button class="delete-button" onclick="eliminarPaciente(${paciente.id})">Eliminar</button>
+          </div>
+        `;
+        lista.appendChild(item);
+      });
+    }
+
+    function buscarPaciente(codigo) {
+      const pacienteEncontrado = pacientes.find(p => p.codigo.toLowerCase() === codigo.toLowerCase());
+      if (pacienteEncontrado) {
+        const lista = document.getElementById('pacientesList');
+        lista.innerHTML = '';
+        const item = document.createElement('div');
+        item.className = 'paciente-item';
+        item.innerHTML = `
+          <h3>${pacienteEncontrado.nombre} (Código: ${pacienteEncontrado.codigo})</h3>
+          <p>Edad: ${pacienteEncontrado.edad} | Sexo: ${pacienteEncontrado.sexo} | Categoría: ${pacienteEncontrado.categoria} - ${pacienteEncontrado.subcategoria}${pacienteEncontrado.subnivel ? ' - ' + pacienteEncontrado.subnivel : ''}</p>
+          <p>Peso: ${pacienteEncontrado.peso} kg | Talla: ${pacienteEncontrado.talla} cm</p>
+          <p>Morbilidades: ${pacienteEncontrado.morbilidades}</p>
+          <p>Alergias: ${pacienteEncontrado.alergias}</p>
+          <p>Emergencia: ${pacienteEncontrado.emergencyContact.name} (${pacienteEncontrado.emergencyContact.relation}) - Tel: ${pacienteEncontrado.emergencyContact.phone}</p>
+        `;
+        lista.appendChild(item);
+      } else {
+        alert('Paciente no encontrado');
+      }
+    }
+
+    document.getElementById('searchButton').addEventListener('click', function() {
+      const searchCode = document.getElementById('searchInput').value.trim();
+      if (searchCode) {
+        buscarPaciente(searchCode);
+      } else {
+        actualizarListaPacientes();
+      }
+      document.getElementById('patientList').style.display = 'block';
+    });
+
+    document.getElementById('searchInput').addEventListener('input', function() {
+      if (this.value.trim() === '') {
+        actualizarListaPacientes();
+        document.getElementById('patientList').style.display = 'block';
+      }
+    });
+
+    document.getElementById('consultaForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const consulta = {
+        id: Date.now(),
+        pacienteId: document.getElementById('pacienteSelect').value,
+        fecha: document.getElementById('fechaConsulta').value,
+        diagnostico: document.getElementById('diagnostico').value,
+        tratamiento: document.getElementById('tratamiento').value
+      };
+      consultas.push(consulta);
+      saveData(); 
+      actualizarTablaConsultas();
+      actualizarSelectMeses();
+      actualizarEstadisticas();
+      this.reset();
+    });
+
+    function actualizarSelectPacientes(searchTerm = '') {
+      const select = document.getElementById('pacienteSelect');
+      select.innerHTML = '<option value="">Seleccione un paciente</option>';
+      pacientes.forEach(paciente => {
+        if (searchTerm === '' || 
+            paciente.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            paciente.codigo.toLowerCase().includes(searchTerm.toLowerCase())) {
+          const option = document.createElement('option');
+          option.value = paciente.id;
+          option.textContent = `${paciente.nombre} (Código: ${paciente.codigo})`;
+          select.appendChild(option);
+        }
+      });
+    }
+
+    document.getElementById('pacienteSearch').addEventListener('input', function() {
+      actualizarSelectPacientes(this.value);
+    });
+
+    function actualizarTablaConsultas(month = '') {
+      const tbody = document.getElementById('consultasTableBody');
+      tbody.innerHTML = '';
+      consultas
+        .filter(consulta => month === '' || consulta.fecha.startsWith(month))
+        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+        .forEach(consulta => {
+          const paciente = pacientes.find(p => p.id == consulta.pacienteId);
+          const row = tbody.insertRow();
+          row.innerHTML = `
+            <td>${consulta.fecha}</td>
+            <td>${paciente ? paciente.nombre : 'Paciente Desconocido'}</td>
+            <td>${consulta.diagnostico}</td>
+            <td>${consulta.tratamiento}</td>
+          `;
+        });
+    }
+
+    function actualizarSelectMeses() {
+      const select = document.getElementById('monthSelect');
+      const months = [...new Set(consultas.map(c => c.fecha.slice(0, 7)))].sort().reverse();
+      select.innerHTML = '<option value="">Todos los meses</option>';
+      months.forEach(month => {
+        const option = document.createElement('option');
+        option.value = month;
+        option.textContent = new Date(month + '-01').toLocaleString('default', { month: 'long', year: 'numeric' });
+        select.appendChild(option);
+      });
+    }
+
+    function actualizarEstadisticas(month = '') {
+      const container = document.getElementById('estadisticasContainer');
+      container.innerHTML = '';
+
+      const consultasFiltradas = month ? consultas.filter(c => c.fecha.startsWith(month)) : consultas;
+
+      Object.entries(categoriasSIS03).forEach(([categoria, diagnosticos]) => {
+        const categoriaDiv = document.createElement('div');
+        categoriaDiv.className = 'categoria-item';
+        categoriaDiv.innerHTML = `<h3>${categoria}</h3>`;
+
+        if (diagnosticos.length > 0) {
+          diagnosticos.forEach(diagnostico => {
+            const count = consultasFiltradas.filter(c => c.diagnostico === diagnostico).length;
+            if (count > 0) {
+              const diagnosticoDiv = document.createElement('div');
+              diagnosticoDiv.className = 'diagnostico-count';
+              diagnosticoDiv.innerHTML = `
+                <span>${diagnostico}</span>
+                <span>${count}</span>
+              `;
+              categoriaDiv.appendChild(diagnosticoDiv);
+            }
+          });
+        } else {
+          const count = consultasFiltradas.filter(c => c.diagnostico === categoria).length;
+          if (count > 0) {
+            const diagnosticoDiv = document.createElement('div');
+            diagnosticoDiv.className = 'diagnostico-count';
+            diagnosticoDiv.innerHTML = `
+              <span>${categoria}</span>
+              <span>${count}</span>
+            `;
+            categoriaDiv.appendChild(diagnosticoDiv);
+          }
+        }
+
+        if (categoriaDiv.children.length > 1) {
+          container.appendChild(categoriaDiv);
+        }
+      });
+    }
+
+    window.addEventListener('load', function() {
+      loadData();
+      actualizarListaPacientes();
+      actualizarSelectPacientes();
+      actualizarTablaConsultas();
+      actualizarSelectMeses();
+      actualizarEstadisticas();
+    });
+
+    document.getElementById('monthSelect').addEventListener('change', function() {
+      const selectedMonth = this.value;
+      actualizarTablaConsultas(selectedMonth);
+      actualizarEstadisticas(selectedMonth);
+    });
+
+    document.getElementById('togglePatientForm').addEventListener('click', function() {
+      const patientRegistration = document.getElementById('patientRegistration');
+      if (patientRegistration.style.display === 'none' || patientRegistration.style.display === '') {
+        patientRegistration.style.display = 'block';
+      } else {
+        patientRegistration.style.display = 'none';
+      }
+    });
+
+    document.getElementById('togglePatientList').addEventListener('click', function() {
+      const patientList = document.getElementById('patientList');
+      if (patientList.style.display === 'none' || patientList.style.display === '') {
+        patientList.style.display = 'block';
+        actualizarListaPacientes();
+      } else {
+        patientList.style.display = 'none';
+      }
+    });
+
+    document.getElementById('categoria').addEventListener('change', function() {
+      const subcategoriaEstudiante = document.getElementById('subcategoriaEstudiante');
+      const subcategoriaPersonal = document.getElementById('subcategoriaPersonal');
+      const nivelEducativo = document.getElementById('nivelEducativo');
+      const tipoPersonal = document.getElementById('tipoPersonal');
+      const subnivelInicial = document.getElementById('subnivelInicial');
+      const subnivelBasica = document.getElementById('subnivelBasica');
+      const subnivelSecundaria = document.getElementById('subnivelSecundaria');
+
+      subnivelInicial.style.display = 'none';
+      subnivelBasica.style.display = 'none';
+      subnivelSecundaria.style.display = 'none';
+
+      if (this.value === 'Estudiante') {
+        subcategoriaEstudiante.style.display = 'block';
+        subcategoriaPersonal.style.display = 'none';
+        nivelEducativo.required = true;
+        tipoPersonal.required = false;
+      } else if (this.value === 'Personal') {
+        subcategoriaEstudiante.style.display = 'none';
+        subcategoriaPersonal.style.display = 'block';
+        nivelEducativo.required = false;
+        tipoPersonal.required = true;
+      } else {
+        subcategoriaEstudiante.style.display = 'none';
+        subcategoriaPersonal.style.display = 'none';
+        nivelEducativo.required = false;
+        tipoPersonal.required = false;
+      }
+    });
+
+    document.getElementById('nivelEducativo').addEventListener('change', function() {
+      const subnivelInicial = document.getElementById('subnivelInicial');
+      const subnivelBasica = document.getElementById('subnivelBasica');
+      const subnivelSecundaria = document.getElementById('subnivelSecundaria');
+      const subnivelInicialSelect = document.getElementById('subnivelInicialSelect');
+      const subnivelBasicaSelect = document.getElementById('subnivelBasicaSelect');
+      const subnivelSecundariaSelect = document.getElementById('subnivelSecundariaSelect');
+
+      subnivelInicial.style.display = 'none';
+      subnivelBasica.style.display = 'none';
+      subnivelSecundaria.style.display = 'none';
+      subnivelInicialSelect.required = false;
+      subnivelBasicaSelect.required = false;
+      subnivelSecundariaSelect.required = false;
+
+      if (this.value === 'Inicial') {
+        subnivelInicial.style.display = 'block';
+        subnivelInicialSelect.required = true;
+      } else if (this.value === 'Básica') {
+        subnivelBasica.style.display = 'block';
+        subnivelBasicaSelect.required = true;
+      } else if (this.value === 'Secundaria') {
+        subnivelSecundaria.style.display = 'block';
+        subnivelSecundariaSelect.required = true;
+      }
+    });
+
+    document.getElementById('downloadPdfButton').addEventListener('click', function() {
+      const doc = new jsPDF();
+      const container = document.getElementById('estadisticasContainer');
+
+      doc.setFontSize(18);
+      doc.text('Estadísticas Mensuales', 10, 10);
+      
+      let yOffset = 30;
+      
+      container.querySelectorAll('.categoria-item').forEach(categoriaItem => {
+        doc.setFontSize(14);
+        doc.text(categoriaItem.querySelector('h3').textContent, 10, yOffset);
+        yOffset += 10;
+        
+        categoriaItem.querySelectorAll('.diagnostico-count').forEach(diagnosticoItem => {
+          const diagnostico = diagnosticoItem.querySelector('span:first-child').textContent;
+          const count = diagnosticoItem.querySelector('span:last-child').textContent;
+          doc.setFontSize(12);
+          doc.text(`${diagnostico}: ${count}`, 20, yOffset);
+          yOffset += 7;
+        });
+        
+        yOffset += 10;
+        
+        if (yOffset > 280) {
+          doc.addPage();
+          yOffset = 20;
+        }
+      });
+      
+      const selectedMonth = document.getElementById('monthSelect').value;
+      const fileName = selectedMonth ? `estadisticas_${selectedMonth}.pdf` : 'estadisticas.pdf';
+      
+      doc.save(fileName);
+    });
+
+    cargarOpcionesDiagnostico();
+    actualizarSelectMeses();
+    actualizarTablaConsultas();
+    actualizarEstadisticas();
+  </script>
+</body>
+</html>
